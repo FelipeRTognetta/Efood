@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 import star from '../../assets/images/star.svg'
 import {
   Card,
@@ -39,7 +41,9 @@ const RestaurantCard = ({
       </Rating>
     </CardHeader>
     <Description>{description}</Description>
-    <Button href="#">Saiba mais</Button>
+    <Link to="/restaurant">
+      <Button>Saiba mais</Button>
+    </Link>
   </Card>
 )
 

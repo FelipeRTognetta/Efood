@@ -8,6 +8,7 @@ export const ImagemBg = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 40px 0;
+  margin-bottom: 80px;
 `
 
 export const Text = styled.p`

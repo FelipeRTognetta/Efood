@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { colors } from '../../styles'
 
-export const FooterDiv = styled.div`
+export const FooterDiv = styled.footer`
   width: 100%;
   height: 296px;
   display: flex;
@@ -9,6 +9,7 @@ export const FooterDiv = styled.div`
   align-items: center;
   padding: 40px 0;
   background-color: ${colors.offWhite};
+  margin-top: 120px;
 `
 export const Social = styled.a`
   margin-right: 8px;

@@ -30,10 +30,10 @@ export const Rating = styled.div`
 export const Description = styled.p`
   font-size: 14px;
   line-height: 22px;
-  margin: 8px;
+  margin: 17px 8px;
 `
 
-export const Button = styled.a`
+export const Button = styled.button`
   margin: 8px;
   padding: 4px 6px;
   font-weight: 700;
@@ -41,7 +41,8 @@ export const Button = styled.a`
   line-height: 16px;
   background-color: ${colors.pink};
   color: ${colors.offWhite};
-  text-decoration: none;
+  border: none;
+  cursor: pointer;
 `
 
 export const Tag = styled.div`
