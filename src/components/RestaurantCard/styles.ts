@@ -4,7 +4,6 @@ import { colors } from '../../styles'
 export const Card = styled.li`
   border: 1px solid ${colors.pink};
   background-color: ${colors.white};
-  padding-bottom: 8px;
   position: relative;
 `
 

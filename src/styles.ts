@@ -19,7 +19,6 @@ export const GlobalCss = createGlobalStyle`
   body {
     background-color: ${colors.offWhiteBG};
     color: ${colors.pink};
-    padding-top: 40px;
   }
 
   .container {
