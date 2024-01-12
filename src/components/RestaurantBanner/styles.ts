@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { colors } from '../../styles'
+import { Link } from 'react-router-dom'
 
 export const ImagemBg = styled.div`
   width: 100%;
@@ -15,6 +16,19 @@ export const BannerInfos = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 64px;
+
+  p {
+    font-weight: 900;
+    font-size: 18px;
+    text-decoration: none;
+    color: ${colors.pink};
+  }
+`
+export const BannerInfo = styled(Link)`
+  font-weight: 900;
+  font-size: 18px;
+  text-decoration: none;
+  color: ${colors.pink};
 `
 
 export const BannerImg = styled.div`

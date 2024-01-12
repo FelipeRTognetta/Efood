@@ -9,14 +9,18 @@ import {
   BannerInfos,
   BannerImg,
   BlackLayer,
-  Tags
+  Tags,
+  BannerInfo
 } from './styles'
 
 const RestaurantBanner = () => (
   <Banner>
     <ImagemBg style={{ backgroundImage: `url(${bannerImg})` }}>
       <BannerInfos className="container">
-        <h3>Restaurantes</h3>
+        <h3>
+          <BannerInfo to="/">Restaurantes</BannerInfo>
+        </h3>
+
         <Link to="/">
           <img src={logo} alt="Efood" />
         </Link>
