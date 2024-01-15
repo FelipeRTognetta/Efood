@@ -1,14 +1,16 @@
-import pizza from '../../assets/images/pizza.png'
 import { Card, Button } from './styles'
 
-const FoodCard = () => (
+type Props = {
+  foto: string
+  nome: string
+  descricao: string
+}
+
+const FoodCard = ({ foto, nome, descricao }: Props) => (
   <Card>
-    <img src={pizza} alt="Pizza" />
-    <h5>Pizza Marguerita</h5>
-    <p>
-      A clássica Marguerita: molho de tomate suculento, mussarela derretida,
-      manjericão fresco e um toque de azeite. Sabor e simplicidade!
-    </p>
+    <img src={foto} alt="Pizza" />
+    <h5>{nome}</h5>
+    <p>{descricao}</p>
     <Button>Adicionar ao carrinho</Button>
   </Card>
 )

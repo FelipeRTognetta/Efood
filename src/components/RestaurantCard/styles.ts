@@ -5,6 +5,17 @@ export const Card = styled.li`
   border: 1px solid ${colors.pink};
   background-color: ${colors.white};
   position: relative;
+  width: 472px;
+
+  .img-container {
+    height: 217px;
+
+    > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
 `
 
 export const CardHeader = styled.div`

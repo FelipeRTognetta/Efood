@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 
 import logo from '../../assets/images/logo.png'
 import bannerImg from '../../assets/images/banner.png'
-import trattoriaB from '../../assets/images/trattoria-banner.png'
 import {
   ImagemBg,
   Banner,
@@ -13,7 +12,13 @@ import {
   BannerInfo
 } from './styles'
 
-const RestaurantBanner = () => (
+type Props = {
+  capa: string
+  tipo: string
+  titulo: string
+}
+
+const RestaurantBanner = ({ capa, tipo, titulo }: Props) => (
   <Banner>
     <ImagemBg style={{ backgroundImage: `url(${bannerImg})` }}>
       <BannerInfos className="container">
@@ -27,11 +32,11 @@ const RestaurantBanner = () => (
         <p>0 produto(s) no carrinho</p>
       </BannerInfos>
     </ImagemBg>
-    <BannerImg style={{ backgroundImage: `url(${trattoriaB})` }}>
+    <BannerImg style={{ backgroundImage: `url(${capa})` }}>
       <BlackLayer>
         <Tags className="container">
-          <h4>Italiana</h4>
-          <h2>La Dolce Vita Trattoria</h2>
+          <h4>{tipo}</h4>
+          <h2>{titulo}</h2>
         </Tags>
       </BlackLayer>
     </BannerImg>

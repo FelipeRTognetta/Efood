@@ -12,39 +12,50 @@ import {
 } from './styles'
 
 type Props = {
+  id: number
   title: string
-  rating: string
+  rating: number
   description: string
-  infos: string[]
+  destacado: boolean
+  tipo: string
   image: string
 }
 
 const RestaurantCard = ({
+  id,
   title,
   rating,
   description,
-  infos,
+  destacado,
+  tipo,
   image
-}: Props) => (
-  <Card>
-    <img src={image} alt={title} />
-    <Infos>
-      {infos.map((info) => (
-        <Tag key={info}>{info}</Tag>
-      ))}
-    </Infos>
-    <CardHeader>
-      <h3>{title}</h3>
-      <Rating>
-        <p>{rating}</p>
-        <img src={star} alt="stars" />
-      </Rating>
-    </CardHeader>
-    <Description>{description}</Description>
-    <Link to="/restaurant">
-      <Button>Saiba mais</Button>
-    </Link>
-  </Card>
-)
+}: Props) => {
+  const destaque = () => {
+    if (destacado) return <Tag>Destaque do dia</Tag>
+  }
+
+  return (
+    <Card>
+      <div className="img-container">
+        <img src={image} alt={title} />
+      </div>
+      <Infos>
+        {destaque()}
+        <Tag>{tipo}</Tag>
+      </Infos>
+      <CardHeader>
+        <h3>{title}</h3>
+        <Rating>
+          <p>{rating}</p>
+          <img src={star} alt="stars" />
+        </Rating>
+      </CardHeader>
+      <Description>{description}</Description>
+      <Link to={`/restaurant/${id}`}>
+        <Button>Saiba mais</Button>
+      </Link>
+    </Card>
+  )
+}
 
 export default RestaurantCard
