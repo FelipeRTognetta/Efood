@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 const RestaurantPage = () => {
   const { id } = useParams()
 
-  const [restaurant, setRestaurant] = useState<Restaurant[]>([])
+  const [restaurant, setRestaurant] = useState<Restaurant>()
 
   useEffect(() => {
     fetch(`https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`)
@@ -25,7 +25,16 @@ const RestaurantPage = () => {
           titulo={restaurant.titulo}
         />
       )}
-      <FoodList restaurants={restaurant} />
+      {restaurant && restaurant.cardapio && (
+        <FoodList
+          id={restaurant.cardapio.id}
+          nome={restaurant.cardapio.nome}
+          foto={restaurant.cardapio.foto}
+          descricao={restaurant.cardapio.descricao}
+          porcao={restaurant.cardapio.porcao}
+          preco={restaurant.cardapio.preco}
+        />
+      )}
     </>
   )
 }

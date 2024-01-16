@@ -64,6 +64,7 @@ export const CloseB = styled.img`
   right: 0;
   position: absolute;
   margin: 8px;
+  cursor: pointer;
 `
 
 export const ModalImg = styled.img`
