@@ -1,11 +1,25 @@
-import FoodCard from '../FoodCard'
-import { Button } from '../FoodCard/styles'
-import { List, Modal, Overlay, ModalContent, CloseB, ModalImg } from './styles'
+import {
+  List,
+  Modal,
+  Overlay,
+  ModalContent,
+  CloseB,
+  ModalImg,
+  Button,
+  Card,
+  FoodTitle,
+  FoodDescription,
+  FoodImg
+} from './styles'
 
 import close from '../../assets/images/close.png'
 import { useState } from 'react'
 
-type Props = {
+type FoodListProps = {
+  menu: FoodItem[]
+}
+
+export interface FoodItem {
   id: number
   foto: string
   nome: string
@@ -16,16 +30,25 @@ type Props = {
 
 export interface ModalState {
   isVisible: boolean
+  selectedFood?: FoodItem
 }
 
-const FoodList = ({ id, foto, nome, descricao, preco, porcao }: Props) => {
+const FoodList = ({ menu }: FoodListProps) => {
   const [modal, setModal] = useState<ModalState>({
-    isVisible: false
+    isVisible: false,
+    selectedFood: undefined
   })
 
   const closeModal = () => {
     setModal({
       isVisible: false
+    })
+  }
+
+  const openModal = (foodItem: FoodItem) => {
+    setModal({
+      isVisible: true,
+      selectedFood: foodItem
     })
   }
 
@@ -36,38 +59,64 @@ const FoodList = ({ id, foto, nome, descricao, preco, porcao }: Props) => {
     }).format(preco)
   }
 
+  const getDescricao = (descricao: string) => {
+    if (descricao.length > 155) {
+      return descricao.slice(0, 147) + '...'
+    }
+    return descricao
+  }
+
   return (
     <>
       <List className="container">
-        <FoodCard
-          onClickCard={() => {
-            setModal({
-              isVisible: true
-            })
-          }}
-          key={id}
-          foto={foto}
-          nome={nome}
-          descricao={descricao}
-        />
+        {menu.map((foodItem) => (
+          <Card key={foodItem.id}>
+            <FoodImg
+              className="img-container"
+              src={foodItem.foto}
+              alt={foodItem.nome}
+            />
+            <FoodTitle>{foodItem.nome}</FoodTitle>
+            <FoodDescription>
+              {getDescricao(foodItem.descricao)}
+            </FoodDescription>
+            <Button
+              onClick={() => {
+                openModal(foodItem)
+              }}
+            >
+              Adicionar ao carrinho
+            </Button>
+          </Card>
+        ))}
       </List>
+
       <Modal className={modal.isVisible ? 'visible' : ''}>
-        <ModalContent className="container">
-          <CloseB
-            src={close}
-            alt="Click to close"
-            onClick={() => {
-              closeModal()
-            }}
-          />
-          <ModalImg src={foto} alt={nome} />
-          <div>
-            <h3>{nome}</h3>
-            <p>{descricao}</p>
-            <p>Serve: de {porcao}</p>
-            <Button>Adicionar ao carrinho - {formataPreco(preco)}</Button>
-          </div>
-        </ModalContent>
+        {modal.selectedFood && (
+          <ModalContent key={modal.selectedFood.id} className="container">
+            <CloseB
+              src={close}
+              alt="Click to close"
+              onClick={() => {
+                closeModal()
+              }}
+            />
+            <ModalImg
+              className="modal-img-container"
+              src={modal.selectedFood.foto}
+              alt={modal.selectedFood.nome}
+            />
+            <div>
+              <h3>{modal.selectedFood.nome}</h3>
+              <p>{modal.selectedFood.descricao}</p>
+              <p>Serve: de {modal.selectedFood.porcao}</p>
+              <Button>
+                Adicionar ao carrinho - {formataPreco(modal.selectedFood.preco)}
+              </Button>
+            </div>
+          </ModalContent>
+        )}
+
         <Overlay
           onClick={() => {
             closeModal()
