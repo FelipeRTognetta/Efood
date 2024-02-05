@@ -22,6 +22,7 @@ export const BannerInfos = styled.div`
     font-size: 18px;
     text-decoration: none;
     color: ${colors.pink};
+    cursor: pointer;
   }
 `
 export const BannerInfo = styled(Link)`
