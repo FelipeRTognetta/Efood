@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 export const Card = styled.li`
   border: 1px solid ${colors.pink};
@@ -16,6 +16,14 @@ export const Card = styled.li`
       object-fit: cover;
     }
   }
+
+  @media (max-width: ${breakpoints.desktop}) {
+    width: 100%;
+
+    .img-container {
+      height: 144px;
+    }
+  }
 `
 
 export const CardHeader = styled.div`
@@ -26,6 +34,11 @@ export const CardHeader = styled.div`
   font-weight: 700;
   margin: 8px;
   line-height: 22px;
+
+  @media (max-width: ${breakpoints.desktop}) {
+    font-size: 15px;
+    line-height: 18px;
+  }
 `
 
 export const Rating = styled.div`
@@ -41,6 +54,11 @@ export const Description = styled.p`
   font-size: 14px;
   line-height: 22px;
   margin: 17px 8px;
+
+  @media (max-width: ${breakpoints.desktop}) {
+    font-size: 12px;
+    line-height: 18px;
+  }
 `
 
 export const Button = styled.button`

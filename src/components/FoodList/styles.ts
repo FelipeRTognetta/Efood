@@ -1,10 +1,19 @@
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 export const List = styled.ul`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 32px;
+
+  @media (max-width: ${breakpoints.desktop}) {
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 28px 5%;
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+  }
 `
 
 export const Card = styled.li`
@@ -15,6 +24,16 @@ export const Card = styled.li`
   .img-container {
     width: 304px;
     height: 168px;
+  }
+
+  @media (max-width: ${breakpoints.desktop}) {
+    width: 100%;
+  }
+
+  .img-container {
+    width: 100%;
+    height: 148px;
+  }
 `
 export const FoodImg = styled.img`
   width: 100%;
@@ -27,14 +46,16 @@ export const FoodTitle = styled.h5`
   margin-top: 8px;
   margin-bottom: 8px;
 `
-
 export const FoodDescription = styled.p`
   font-weight: 400;
   font-size: 14px;
   line-height: 22px;
   margin-bottom: 8px;
-`
 
+  @media (max-width: ${breakpoints.desktop}) {
+    line-height: 20px;
+  }
+`
 export const Button = styled.button`
   font-weight: 700;
   font-size: 14px;
@@ -91,6 +112,29 @@ export const ModalContent = styled.div`
   .modal-img-container {
     width: 280px;
     height: 280px;
+  }
+
+  @media (max-width: ${breakpoints.desktop}) {
+    p {
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .modal-img-container {
+      width: 240px;
+      height: 240px;
+    }
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    display: block;
+    height: auto;
+
+    .modal-img-container {
+      width: 100%;
+      height: 184px;
+      margin-bottom: 8px;
+    }
   }
 `
 
