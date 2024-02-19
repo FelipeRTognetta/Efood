@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
 import logo from '../../assets/images/logo.png'
 import bannerImg from '../../assets/images/banner.png'
@@ -13,7 +14,6 @@ import {
 } from './styles'
 
 import { open } from '../../store/reducers/cart'
-import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '../../store'
 
 type Props = {
@@ -41,7 +41,9 @@ const RestaurantBanner = ({ capa, tipo, titulo }: Props) => {
           <Link to="/">
             <img src={logo} alt="Efood" />
           </Link>
-          <p onClick={openCart}>{items.length} produto(s) no carrinho</p>
+          <p onClick={openCart}>
+            {items.length} <span>produto(s)</span> no carrinho
+          </p>
         </BannerInfos>
       </ImagemBg>
       <BannerImg style={{ backgroundImage: `url(${capa})` }}>

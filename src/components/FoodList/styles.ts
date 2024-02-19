@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 import { breakpoints, colors } from '../../styles'
 
+type MarginProps = {
+  marginTop?: string
+}
+
 export const List = styled.ul`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -56,7 +60,7 @@ export const FoodDescription = styled.p`
     line-height: 20px;
   }
 `
-export const Button = styled.button`
+export const Button = styled.button<MarginProps>`
   font-weight: 700;
   font-size: 14px;
   background-color: ${colors.offWhite};
@@ -65,6 +69,7 @@ export const Button = styled.button`
   border: none;
   width: 100%;
   cursor: pointer;
+  margin-top: ${(props) => props.marginTop || '0'};
 `
 
 export const Modal = styled.div`

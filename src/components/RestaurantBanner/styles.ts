@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 import { Link } from 'react-router-dom'
 
 export const ImagemBg = styled.div`
@@ -23,6 +23,18 @@ export const BannerInfos = styled.div`
     text-decoration: none;
     color: ${colors.pink};
     cursor: pointer;
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    h3 {
+      display: none;
+    }
+
+    p {
+      span {
+        display: none;
+      }
+    }
   }
 `
 export const BannerInfo = styled(Link)`
@@ -58,6 +70,10 @@ export const Tags = styled.div`
 
   h4 {
     font-weight: 100;
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    font-size: 28px;
   }
 `
 

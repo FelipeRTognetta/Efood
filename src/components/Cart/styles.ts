@@ -24,6 +24,7 @@ export const CartContainer = styled.div`
 `
 
 export const Sidebar = styled.aside`
+  color: ${colors.offWhite};
   background-color: ${colors.pink};
   z-index: 1;
   padding: 32px 8px;
@@ -33,12 +34,15 @@ export const Sidebar = styled.aside`
   @media (max-width: ${breakpoints.tablet}) {
     width: 80%;
   }
+
+  .display-none {
+    display: none;
+  }
 `
 
 export const TotalPrice = styled.div`
   display: flex;
   justify-content: space-between;
-  color: ${colors.offWhite};
   font-size: 14px;
   font-weight: 700;
   margin-bottom: 16px;
@@ -51,6 +55,7 @@ export const CartItem = styled.li`
   background-color: ${colors.offWhite};
   padding: 8px 8px 12px 8px;
   margin-bottom: 16px;
+  color: ${colors.pink};
 
   .img-container {
     width: 80px;
@@ -79,4 +84,49 @@ export const Delete = styled.img`
   right: 8px;
   position: absolute;
   cursor: pointer;
+`
+
+export const FormTitle = styled.h4`
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 16px;
+`
+
+export const InputGroup = styled.div`
+  margin-bottom: 8px;
+
+  label {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  input {
+    background-color: ${colors.offWhite};
+    height: 32px;
+    width: 100%;
+    border: 1px solid ${colors.offWhite};
+    padding: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    color: ${colors.gray};
+  }
+
+  small {
+    display: block;
+  }
+`
+
+export const RowGroup = styled.div`
+  display: flex;
+  gap: 34px;
+`
+
+export const CartP = styled.p`
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  margin-top: 16px;
 `
