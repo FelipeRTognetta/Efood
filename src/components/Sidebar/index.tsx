@@ -17,7 +17,7 @@ const Sidebar = () => {
   const { isOpen, items } = useSelector((state: RootReducer) => state.cart)
   const [currentScreen, setCurrentScreen] = useState('cart')
   const dispatch = useDispatch()
-  const [order, { data, isSuccess, isLoading }] = useOrderMutation()4
+  const [order, { data, isSuccess, isLoading }] = useOrderMutation()
 
   const form = useFormik({
     initialValues: {
@@ -274,10 +274,7 @@ const Sidebar = () => {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                     className={
-                      checkInputHasError('adressNumber') ||
-                      buttonCheckInputHasError('adressNumber')
-                        ? 'error'
-                        : ''
+                      checkInputHasError('adressNumber') ? 'error' : ''
                     }
                   />
                 </S.InputGroup>
@@ -393,7 +390,6 @@ const Sidebar = () => {
                   marginTop="24px"
                   onClick={() => {
                     form.submitForm()
-                    setPaymentButtonClicked(true)
                   }}
                   disabled={isLoading}
                 >
