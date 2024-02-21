@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { breakpoints, colors } from '../../styles'
+import { Button, breakpoints, colors } from '../../styles'
 
 export const Overlay = styled.div`
   position: absolute;
@@ -41,6 +41,7 @@ export const Sidebar = styled.aside`
     text-align: center;
     margin: 0 8px;
   }
+}
 `
 
 export const TotalPrice = styled.div`

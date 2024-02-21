@@ -13,11 +13,11 @@ import { Button } from '../../styles'
 import * as S from './styles'
 import trash from '../../assets/images/trash.svg'
 
-const Cart = () => {
+const Sidebar = () => {
   const { isOpen, items } = useSelector((state: RootReducer) => state.cart)
   const [currentScreen, setCurrentScreen] = useState('cart')
   const dispatch = useDispatch()
-  const [order, { data, isSuccess, isLoading }] = useOrderMutation()
+  const [order, { data, isSuccess, isLoading }] = useOrderMutation()4
 
   const form = useFormik({
     initialValues: {
@@ -35,34 +35,39 @@ const Cart = () => {
     },
     validationSchema: Yup.object({
       receiver: Yup.string()
-        .min(5, 'O nome precisa ter pelomenos 5 caracteres')
+        .min(5, 'O nome precisa ter pelo menos 5 caracteres')
         .required('O campo é obrigatório'),
       description: Yup.string()
-        .min(5, 'O endereço precisa ter pelomenos 5 caracteres')
+        .min(5, 'O endereço precisa ter pelo menos 5 caracteres')
         .required('O campo é obrigatório'),
       city: Yup.string()
-        .min(3, 'A cidade precisa ter pelomenos 3 caracteres')
+        .min(3, 'A cidade precisa ter pelo menos 3 caracteres')
         .required('O campo é obrigatório'),
       zipCode: Yup.string()
         .min(9, 'CEP inválido')
+        .matches(/^\d{5}-\d{3}$/, 'CEP inválido')
         .required('O campo é obrigatório'),
       adressNumber: Yup.string().required('O campo é obrigatório'),
       complement: Yup.string(),
       cardName: Yup.string()
-        .min(5, 'O nome precisa ter pelomenos 5 caracteres')
+        .min(5, 'O nome precisa ter pelo menos 5 caracteres')
         .required('O campo é obrigatório'),
       cardNumber: Yup.string()
         .min(19, 'Número inválido')
         .max(19, 'Número inválido')
+        .matches(/^\d{4} \d{4} \d{4} \d{4}$/, 'Número inválido')
         .required('O campo é obrigatório'),
       cardCode: Yup.string()
         .min(3, 'Número inválido')
+        .matches(/^\d{3}$/, 'Número inválido')
         .required('O campo é obrigatório'),
       month: Yup.string()
+        .matches(/^(0[1-9]|1[0-2])$/, 'Número inválido')
         .min(2, 'Número inválido')
         .max(2, 'Número inválido')
         .required('O campo é obrigatório'),
       year: Yup.string()
+        .matches(/^\d{4}$/, 'Número inválido')
         .min(4, 'Número inválido')
         .max(4, 'Número inválido')
         .required('O campo é obrigatório')
@@ -138,6 +143,23 @@ const Cart = () => {
     return hasError
   }
 
+  const isDeliveryFormValid = () => {
+    const relevantFields = [
+      'receiver',
+      'description',
+      'city',
+      'zipCode',
+      'adressNumber'
+    ]
+    const allFieldsTouched = relevantFields.every(
+      (fieldName) => fieldName in form.touched
+    )
+    const hasError = relevantFields.some(
+      (fieldName) => fieldName in form.errors
+    )
+    return !hasError && allFieldsTouched
+  }
+
   return (
     <S.SidebarContainer className={isOpen ? 'is-open' : ''}>
       <S.Overlay onClick={closeCart} />
@@ -180,7 +202,9 @@ const Cart = () => {
               <p>Valor total</p>
               <p>{parseToBrl(getTotalPrice())}</p>
             </S.TotalPrice>
-            <Button onClick={showDelivery}>Continuar com a entrega</Button>
+            <Button type="button" onClick={showDelivery}>
+              Continuar com a entrega
+            </Button>
           </div>
         )}
 
@@ -250,7 +274,10 @@ const Cart = () => {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                     className={
-                      checkInputHasError('adressNumber') ? 'error' : ''
+                      checkInputHasError('adressNumber') ||
+                      buttonCheckInputHasError('adressNumber')
+                        ? 'error'
+                        : ''
                     }
                   />
                 </S.InputGroup>
@@ -268,103 +295,115 @@ const Cart = () => {
                 />
               </S.InputGroup>
 
-              <Button onClick={showPayment} marginTop="24px">
+              <Button
+                type="button"
+                onClick={isDeliveryFormValid() ? showPayment : undefined}
+                marginTop="24px"
+              >
                 Continuar com o pagamento
               </Button>
-              <Button onClick={showCart} marginTop="8px">
+              <Button type="button" onClick={showCart} marginTop="8px">
                 Voltar para o carrinho
               </Button>
             </div>
           )}
 
           {/* payment form */}
-          {!isSuccess && currentScreen === 'payment' && (
-            <div>
-              <S.FormTitle>
-                Pagamento - Valor a pagar {parseToBrl(getTotalPrice())}
-              </S.FormTitle>
+          {!isSuccess &&
+            currentScreen === 'payment' &&
+            isDeliveryFormValid() && (
+              <div>
+                <S.FormTitle>
+                  Pagamento - Valor a pagar {parseToBrl(getTotalPrice())}
+                </S.FormTitle>
 
-              <S.InputGroup>
-                <label htmlFor="cardName">Nome no cartão</label>
-                <input
-                  id="cardName"
-                  type="text"
-                  name="cardName"
-                  value={form.values.cardName}
-                  onChange={form.handleChange}
-                  onBlur={form.handleBlur}
-                  className={checkInputHasError('cardName') ? 'error' : ''}
-                />
-              </S.InputGroup>
-              <S.RowGroup>
                 <S.InputGroup>
-                  <label htmlFor="cardNumber">Número do cartão</label>
-                  <InputMask
-                    id="cardNumber"
+                  <label htmlFor="cardName">Nome no cartão</label>
+                  <input
+                    id="cardName"
                     type="text"
-                    name="cardNumber"
-                    value={form.values.cardNumber}
+                    name="cardName"
+                    value={form.values.cardName}
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
-                    className={checkInputHasError('cardNumber') ? 'error' : ''}
-                    mask="9999 9999 9999 9999"
+                    className={checkInputHasError('cardName') ? 'error' : ''}
                   />
                 </S.InputGroup>
-                <S.InputGroup>
-                  <label htmlFor="cardCode">CVV</label>
-                  <InputMask
-                    id="cardCode"
-                    type="text"
-                    name="cardCode"
-                    value={form.values.cardCode}
-                    onChange={form.handleChange}
-                    onBlur={form.handleBlur}
-                    className={checkInputHasError('cardCode') ? 'error' : ''}
-                    mask="999"
-                  />
-                </S.InputGroup>
-              </S.RowGroup>
-              <S.RowGroup>
-                <S.InputGroup>
-                  <label htmlFor="month">Mês de vencimento</label>
-                  <InputMask
-                    id="month"
-                    type="text"
-                    name="month"
-                    value={form.values.month}
-                    onChange={form.handleChange}
-                    onBlur={form.handleBlur}
-                    className={checkInputHasError('month') ? 'error' : ''}
-                    mask="99"
-                  />
-                </S.InputGroup>
-                <S.InputGroup>
-                  <label htmlFor="year">Ano de vencimento</label>
-                  <InputMask
-                    id="year"
-                    type="text"
-                    name="year"
-                    value={form.values.year}
-                    onChange={form.handleChange}
-                    onBlur={form.handleBlur}
-                    className={checkInputHasError('year') ? 'error' : ''}
-                    mask="9999"
-                  />
-                </S.InputGroup>
-              </S.RowGroup>
+                <S.RowGroup>
+                  <S.InputGroup>
+                    <label htmlFor="cardNumber">Número do cartão</label>
+                    <InputMask
+                      id="cardNumber"
+                      type="text"
+                      name="cardNumber"
+                      value={form.values.cardNumber}
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      className={
+                        checkInputHasError('cardNumber') ? 'error' : ''
+                      }
+                      mask="9999 9999 9999 9999"
+                    />
+                  </S.InputGroup>
+                  <S.InputGroup>
+                    <label htmlFor="cardCode">CVV</label>
+                    <InputMask
+                      id="cardCode"
+                      type="text"
+                      name="cardCode"
+                      value={form.values.cardCode}
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      className={checkInputHasError('cardCode') ? 'error' : ''}
+                      mask="999"
+                    />
+                  </S.InputGroup>
+                </S.RowGroup>
+                <S.RowGroup>
+                  <S.InputGroup>
+                    <label htmlFor="month">Mês de vencimento</label>
+                    <InputMask
+                      id="month"
+                      type="text"
+                      name="month"
+                      value={form.values.month}
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      className={checkInputHasError('month') ? 'error' : ''}
+                      mask="99"
+                    />
+                  </S.InputGroup>
+                  <S.InputGroup>
+                    <label htmlFor="year">Ano de vencimento</label>
+                    <InputMask
+                      id="year"
+                      type="text"
+                      name="year"
+                      value={form.values.year}
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      className={checkInputHasError('year') ? 'error' : ''}
+                      mask="9999"
+                    />
+                  </S.InputGroup>
+                </S.RowGroup>
 
-              <Button
-                marginTop="24px"
-                onClick={() => form.submitForm()}
-                disabled={isLoading}
-              >
-                {isLoading ? 'Finalizando...' : 'Finalizar pagamento'}
-              </Button>
-              <Button onClick={showDelivery} marginTop="8px">
-                Voltar para a edição de endereço
-              </Button>
-            </div>
-          )}
+                <Button
+                  type="submit"
+                  marginTop="24px"
+                  onClick={() => {
+                    form.submitForm()
+                    setPaymentButtonClicked(true)
+                  }}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Finalizando...' : 'Finalizar pagamento'}
+                </Button>
+                <Button type="button" onClick={showDelivery} marginTop="8px">
+                  Voltar para a edição de endereço
+                </Button>
+              </div>
+            )}
         </form>
 
         {/* confirmation text */}
@@ -388,7 +427,11 @@ const Cart = () => {
               Esperamos que desfrute de uma deliciosa e agradável experiência
               gastronômica. Bom apetite!
             </S.CartP>
-            <Button marginTop="24px" onClick={() => window.location.reload()}>
+            <Button
+              type="button"
+              marginTop="24px"
+              onClick={() => window.location.reload()}
+            >
               Concluir
             </Button>
           </div>
@@ -398,4 +441,4 @@ const Cart = () => {
   )
 }
 
-export default Cart
+export default Sidebar
