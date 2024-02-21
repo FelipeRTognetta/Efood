@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Restaurant } from '../pages/Home'
 
 type Product = {
   id: number
@@ -17,18 +16,22 @@ type OrderPayload = {
       number: number
       complement: string
     }
-    payment: {
-      card: {
-        name: string
-        number: string
-        code: number
-        expires: {
-          month: number
-          year: number
-        }
+  }
+  payment: {
+    card: {
+      name: string
+      number: string
+      code: number
+      expires: {
+        month: number
+        year: number
       }
     }
   }
+}
+
+type OrderResponse = {
+  orderId: string
 }
 
 const api = createApi({
@@ -42,7 +45,7 @@ const api = createApi({
     getRestaurant: builder.query<Restaurant, string>({
       query: (id) => `restaurantes/${id}`
     }),
-    order: builder.mutation<any, OrderPayload>({
+    order: builder.mutation<OrderResponse, OrderPayload>({
       query: (body) => ({
         url: 'checkout',
         method: 'POST',

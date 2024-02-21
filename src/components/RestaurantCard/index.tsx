@@ -1,15 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import star from '../../assets/images/star.svg'
-import {
-  Card,
-  CardHeader,
-  Rating,
-  Description,
-  Button,
-  Tag,
-  Infos
-} from './styles'
+import * as S from './styles'
 
 type Props = {
   id: number
@@ -31,30 +23,30 @@ const RestaurantCard = ({
   image
 }: Props) => {
   const destaque = () => {
-    if (destacado) return <Tag>Destaque do dia</Tag>
+    if (destacado) return <S.Tag>Destaque do dia</S.Tag>
   }
 
   return (
-    <Card>
+    <S.Card>
       <div className="img-container">
         <img src={image} alt={title} />
       </div>
-      <Infos>
+      <S.Infos>
         {destaque()}
-        <Tag>{tipo}</Tag>
-      </Infos>
-      <CardHeader>
+        <S.Tag>{tipo}</S.Tag>
+      </S.Infos>
+      <S.CardHeader>
         <h3>{title}</h3>
-        <Rating>
+        <S.Rating>
           <p>{rating}</p>
           <img src={star} alt="stars" />
-        </Rating>
-      </CardHeader>
-      <Description>{description}</Description>
+        </S.Rating>
+      </S.CardHeader>
+      <S.Description>{description}</S.Description>
       <Link to={`/restaurant/${id}`}>
-        <Button>Saiba mais</Button>
+        <S.Button>Saiba mais</S.Button>
       </Link>
-    </Card>
+    </S.Card>
   )
 }
 

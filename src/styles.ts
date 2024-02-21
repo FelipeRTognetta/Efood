@@ -1,4 +1,8 @@
-import { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
+
+type MarginProps = {
+  marginTop?: string
+}
 
 export const colors = {
   white: '#fff',
@@ -36,4 +40,16 @@ export const GlobalCss = createGlobalStyle`
       max-width: 80%;
     }
   }
+`
+
+export const Button = styled.button<MarginProps>`
+  font-weight: 700;
+  font-size: 14px;
+  background-color: ${colors.offWhite};
+  color: ${colors.pink};
+  padding: 4px;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  margin-top: ${(props) => props.marginTop || '0'};
 `

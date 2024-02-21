@@ -9,7 +9,7 @@ export const Overlay = styled.div`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.8);
 `
-export const CartContainer = styled.div`
+export const SidebarContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -35,8 +35,11 @@ export const Sidebar = styled.aside`
     width: 80%;
   }
 
-  .display-none {
-    display: none;
+  .empty-text {
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    margin: 0 8px;
   }
 `
 
@@ -112,10 +115,10 @@ export const InputGroup = styled.div`
     font-weight: 700;
     font-size: 14px;
     color: ${colors.gray};
-  }
 
-  small {
-    display: block;
+    &.error {
+      border: 2px solid #c70e0e;
+    }
   }
 `
 

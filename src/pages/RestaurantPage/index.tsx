@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react'
-
-import FoodList, { FoodItem } from '../../components/FoodList'
-import RestaurantBanner from '../../components/RestaurantBanner'
 import { useParams } from 'react-router-dom'
+
+import FoodList from '../../components/FoodList'
 import { useGetRestaurantQuery } from '../../services/api'
+import RestaurantBanner from '../../components/RestaurantBanner'
+import LoadingIcon from '../../components/LoadingIcon'
+
+type RestaurantParams = {
+  id: string
+}
 
 const RestaurantPage = () => {
-  const { id } = useParams()
-  const { data: restaurant } = useGetRestaurantQuery(id!)
+  const { id } = useParams() as RestaurantParams
+  const { data: restaurant } = useGetRestaurantQuery(id)
 
   const [menu, setMenu] = useState<FoodItem[]>([])
 
@@ -23,18 +28,19 @@ const RestaurantPage = () => {
       })
   }, [id])
 
-  return (
-    <>
-      {restaurant && (
+  if (restaurant) {
+    return (
+      <>
         <RestaurantBanner
-          capa={restaurant.capa}
-          tipo={restaurant.tipo}
-          titulo={restaurant.titulo}
+          background={restaurant.capa}
+          couisine={restaurant.tipo}
+          title={restaurant.titulo}
         />
-      )}
-      {restaurant && <FoodList menu={menu} />}
-    </>
-  )
+        <FoodList menu={menu} />
+      </>
+    )
+  }
+  return <LoadingIcon />
 }
 
 export default RestaurantPage

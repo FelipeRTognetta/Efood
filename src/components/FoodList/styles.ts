@@ -1,9 +1,5 @@
 import styled from 'styled-components'
-import { breakpoints, colors } from '../../styles'
-
-type MarginProps = {
-  marginTop?: string
-}
+import { Button, breakpoints, colors } from '../../styles'
 
 export const List = styled.ul`
   display: grid;
@@ -59,17 +55,6 @@ export const FoodDescription = styled.p`
   @media (max-width: ${breakpoints.desktop}) {
     line-height: 20px;
   }
-`
-export const Button = styled.button<MarginProps>`
-  font-weight: 700;
-  font-size: 14px;
-  background-color: ${colors.offWhite};
-  color: ${colors.pink};
-  padding: 4px;
-  border: none;
-  width: 100%;
-  cursor: pointer;
-  margin-top: ${(props) => props.marginTop || '0'};
 `
 
 export const Modal = styled.div`
@@ -139,6 +124,11 @@ export const ModalContent = styled.div`
       width: 100%;
       height: 184px;
       margin-bottom: 8px;
+    }
+
+    ${Button} {
+      max-width: 190px;
+      font-size: 12px;
     }
   }
 `
