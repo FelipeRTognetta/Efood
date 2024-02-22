@@ -18,20 +18,16 @@ const Sidebar = () => {
   const [currentScreen, setCurrentScreen] = useState('cart')
   const dispatch = useDispatch()
   const [order, { data, isSuccess, isLoading }] = useOrderMutation()
+  const [isPayment, setIsPayment] = useState(false)
 
-  const form = useFormik({
+  const formDelivery = useFormik({
     initialValues: {
       receiver: '',
       description: '',
       city: '',
       zipCode: '',
       adressNumber: '',
-      complement: '',
-      cardName: '',
-      cardNumber: '',
-      cardCode: '',
-      month: '',
-      year: ''
+      complement: ''
     },
     validationSchema: Yup.object({
       receiver: Yup.string()
@@ -48,7 +44,22 @@ const Sidebar = () => {
         .matches(/^\d{5}-\d{3}$/, 'CEP inválido')
         .required('O campo é obrigatório'),
       adressNumber: Yup.string().required('O campo é obrigatório'),
-      complement: Yup.string(),
+      complement: Yup.string()
+    }),
+    onSubmit: () => {
+      showPayment()
+    }
+  })
+
+  const formPayment = useFormik({
+    initialValues: {
+      cardName: '',
+      cardNumber: '',
+      cardCode: '',
+      month: '',
+      year: ''
+    },
+    validationSchema: Yup.object({
       cardName: Yup.string()
         .min(5, 'O nome precisa ter pelo menos 5 caracteres')
         .required('O campo é obrigatório'),
@@ -73,19 +84,20 @@ const Sidebar = () => {
         .required('O campo é obrigatório')
     }),
     onSubmit: (values) => {
+      console.log(values)
       order({
         products: items.map((item) => ({
           id: item.id,
           price: item.preco
         })),
         delivery: {
-          receiver: values.receiver,
+          receiver: formDelivery.values.receiver,
           address: {
-            description: values.description,
-            city: values.city,
-            zipCode: values.zipCode,
-            number: Number(values.adressNumber),
-            complement: values.complement
+            description: formDelivery.values.description,
+            city: formDelivery.values.city,
+            zipCode: formDelivery.values.zipCode,
+            number: Number(formDelivery.values.adressNumber),
+            complement: formDelivery.values.complement
           }
         },
         payment: {
@@ -123,10 +135,12 @@ const Sidebar = () => {
 
   const showDelivery = () => {
     setCurrentScreen('delivery')
+    setIsPayment(false)
   }
 
   const showPayment = () => {
     setCurrentScreen('payment')
+    setIsPayment(true)
   }
 
   useEffect(() => {
@@ -136,28 +150,12 @@ const Sidebar = () => {
   }, [isSuccess, dispatch])
 
   const checkInputHasError = (fieldName: string) => {
-    const touched = fieldName in form.touched
-    const invalid = fieldName in form.errors
+    const formToCheck = isPayment ? formPayment : formDelivery
+    const touched = fieldName in formToCheck.touched
+    const invalid = fieldName in formToCheck.errors
     const hasError = touched && invalid
 
     return hasError
-  }
-
-  const isDeliveryFormValid = () => {
-    const relevantFields = [
-      'receiver',
-      'description',
-      'city',
-      'zipCode',
-      'adressNumber'
-    ]
-    const allFieldsTouched = relevantFields.every(
-      (fieldName) => fieldName in form.touched
-    )
-    const hasError = relevantFields.some(
-      (fieldName) => fieldName in form.errors
-    )
-    return !hasError && allFieldsTouched
   }
 
   return (
@@ -207,9 +205,8 @@ const Sidebar = () => {
             </Button>
           </div>
         )}
-
-        <form onSubmit={form.handleSubmit}>
-          {/* delivery form */}
+        {/* delivery form */}
+        <form onSubmit={formDelivery.handleSubmit}>
           {!isSuccess && currentScreen === 'delivery' && (
             <div>
               <S.FormTitle>Entrega</S.FormTitle>
@@ -220,9 +217,9 @@ const Sidebar = () => {
                   id="receiver"
                   type="text"
                   name="receiver"
-                  value={form.values.receiver}
-                  onChange={form.handleChange}
-                  onBlur={form.handleBlur}
+                  value={formDelivery.values.receiver}
+                  onChange={formDelivery.handleChange}
+                  onBlur={formDelivery.handleBlur}
                   className={checkInputHasError('receiver') ? 'error' : ''}
                 />
               </S.InputGroup>
@@ -232,9 +229,9 @@ const Sidebar = () => {
                   id="description"
                   type="text"
                   name="description"
-                  value={form.values.description}
-                  onChange={form.handleChange}
-                  onBlur={form.handleBlur}
+                  value={formDelivery.values.description}
+                  onChange={formDelivery.handleChange}
+                  onBlur={formDelivery.handleBlur}
                   className={checkInputHasError('description') ? 'error' : ''}
                 />
               </S.InputGroup>
@@ -244,9 +241,9 @@ const Sidebar = () => {
                   id="city"
                   type="text"
                   name="city"
-                  value={form.values.city}
-                  onChange={form.handleChange}
-                  onBlur={form.handleBlur}
+                  value={formDelivery.values.city}
+                  onChange={formDelivery.handleChange}
+                  onBlur={formDelivery.handleBlur}
                   className={checkInputHasError('city') ? 'error' : ''}
                 />
               </S.InputGroup>
@@ -257,9 +254,9 @@ const Sidebar = () => {
                     id="zipCode"
                     type="text"
                     name="zipCode"
-                    value={form.values.zipCode}
-                    onChange={form.handleChange}
-                    onBlur={form.handleBlur}
+                    value={formDelivery.values.zipCode}
+                    onChange={formDelivery.handleChange}
+                    onBlur={formDelivery.handleBlur}
                     className={checkInputHasError('zipCode') ? 'error' : ''}
                     mask="99999-999"
                   />
@@ -270,9 +267,9 @@ const Sidebar = () => {
                     id="adressNumber"
                     type="number"
                     name="adressNumber"
-                    value={form.values.adressNumber}
-                    onChange={form.handleChange}
-                    onBlur={form.handleBlur}
+                    value={formDelivery.values.adressNumber}
+                    onChange={formDelivery.handleChange}
+                    onBlur={formDelivery.handleBlur}
                     className={
                       checkInputHasError('adressNumber') ? 'error' : ''
                     }
@@ -285,16 +282,18 @@ const Sidebar = () => {
                   id="complement"
                   type="text"
                   name="complement"
-                  value={form.values.complement}
-                  onChange={form.handleChange}
-                  onBlur={form.handleBlur}
+                  value={formDelivery.values.complement}
+                  onChange={formDelivery.handleChange}
+                  onBlur={formDelivery.handleBlur}
                   className={checkInputHasError('complement') ? 'error' : ''}
                 />
               </S.InputGroup>
 
               <Button
                 type="button"
-                onClick={isDeliveryFormValid() ? showPayment : undefined}
+                onClick={() => {
+                  formDelivery.submitForm()
+                }}
                 marginTop="24px"
               >
                 Continuar com o pagamento
@@ -304,102 +303,100 @@ const Sidebar = () => {
               </Button>
             </div>
           )}
+        </form>
 
-          {/* payment form */}
-          {!isSuccess &&
-            currentScreen === 'payment' &&
-            isDeliveryFormValid() && (
-              <div>
-                <S.FormTitle>
-                  Pagamento - Valor a pagar {parseToBrl(getTotalPrice())}
-                </S.FormTitle>
+        {/* payment form */}
+        <form onSubmit={formPayment.handleSubmit}>
+          {!isSuccess && currentScreen === 'payment' && (
+            <div>
+              <S.FormTitle>
+                Pagamento - Valor a pagar {parseToBrl(getTotalPrice())}
+              </S.FormTitle>
 
+              <S.InputGroup>
+                <label htmlFor="cardName">Nome no cartão</label>
+                <input
+                  id="cardName"
+                  type="text"
+                  name="cardName"
+                  value={formPayment.values.cardName}
+                  onChange={formPayment.handleChange}
+                  onBlur={formPayment.handleBlur}
+                  className={checkInputHasError('cardName') ? 'error' : ''}
+                />
+              </S.InputGroup>
+              <S.RowGroup>
                 <S.InputGroup>
-                  <label htmlFor="cardName">Nome no cartão</label>
-                  <input
-                    id="cardName"
+                  <label htmlFor="cardNumber">Número do cartão</label>
+                  <InputMask
+                    id="cardNumber"
                     type="text"
-                    name="cardName"
-                    value={form.values.cardName}
-                    onChange={form.handleChange}
-                    onBlur={form.handleBlur}
-                    className={checkInputHasError('cardName') ? 'error' : ''}
+                    name="cardNumber"
+                    value={formPayment.values.cardNumber}
+                    onChange={formPayment.handleChange}
+                    onBlur={formPayment.handleBlur}
+                    className={checkInputHasError('cardNumber') ? 'error' : ''}
+                    mask="9999 9999 9999 9999"
                   />
                 </S.InputGroup>
-                <S.RowGroup>
-                  <S.InputGroup>
-                    <label htmlFor="cardNumber">Número do cartão</label>
-                    <InputMask
-                      id="cardNumber"
-                      type="text"
-                      name="cardNumber"
-                      value={form.values.cardNumber}
-                      onChange={form.handleChange}
-                      onBlur={form.handleBlur}
-                      className={
-                        checkInputHasError('cardNumber') ? 'error' : ''
-                      }
-                      mask="9999 9999 9999 9999"
-                    />
-                  </S.InputGroup>
-                  <S.InputGroup>
-                    <label htmlFor="cardCode">CVV</label>
-                    <InputMask
-                      id="cardCode"
-                      type="text"
-                      name="cardCode"
-                      value={form.values.cardCode}
-                      onChange={form.handleChange}
-                      onBlur={form.handleBlur}
-                      className={checkInputHasError('cardCode') ? 'error' : ''}
-                      mask="999"
-                    />
-                  </S.InputGroup>
-                </S.RowGroup>
-                <S.RowGroup>
-                  <S.InputGroup>
-                    <label htmlFor="month">Mês de vencimento</label>
-                    <InputMask
-                      id="month"
-                      type="text"
-                      name="month"
-                      value={form.values.month}
-                      onChange={form.handleChange}
-                      onBlur={form.handleBlur}
-                      className={checkInputHasError('month') ? 'error' : ''}
-                      mask="99"
-                    />
-                  </S.InputGroup>
-                  <S.InputGroup>
-                    <label htmlFor="year">Ano de vencimento</label>
-                    <InputMask
-                      id="year"
-                      type="text"
-                      name="year"
-                      value={form.values.year}
-                      onChange={form.handleChange}
-                      onBlur={form.handleBlur}
-                      className={checkInputHasError('year') ? 'error' : ''}
-                      mask="9999"
-                    />
-                  </S.InputGroup>
-                </S.RowGroup>
+                <S.InputGroup>
+                  <label htmlFor="cardCode">CVV</label>
+                  <InputMask
+                    id="cardCode"
+                    type="text"
+                    name="cardCode"
+                    value={formPayment.values.cardCode}
+                    onChange={formPayment.handleChange}
+                    onBlur={formPayment.handleBlur}
+                    className={checkInputHasError('cardCode') ? 'error' : ''}
+                    mask="999"
+                  />
+                </S.InputGroup>
+              </S.RowGroup>
+              <S.RowGroup>
+                <S.InputGroup>
+                  <label htmlFor="month">Mês de vencimento</label>
+                  <InputMask
+                    id="month"
+                    type="text"
+                    name="month"
+                    value={formPayment.values.month}
+                    onChange={formPayment.handleChange}
+                    onBlur={formPayment.handleBlur}
+                    className={checkInputHasError('month') ? 'error' : ''}
+                    mask="99"
+                  />
+                </S.InputGroup>
+                <S.InputGroup>
+                  <label htmlFor="year">Ano de vencimento</label>
+                  <InputMask
+                    id="year"
+                    type="text"
+                    name="year"
+                    value={formPayment.values.year}
+                    onChange={formPayment.handleChange}
+                    onBlur={formPayment.handleBlur}
+                    className={checkInputHasError('year') ? 'error' : ''}
+                    mask="9999"
+                  />
+                </S.InputGroup>
+              </S.RowGroup>
 
-                <Button
-                  type="submit"
-                  marginTop="24px"
-                  onClick={() => {
-                    form.submitForm()
-                  }}
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Finalizando...' : 'Finalizar pagamento'}
-                </Button>
-                <Button type="button" onClick={showDelivery} marginTop="8px">
-                  Voltar para a edição de endereço
-                </Button>
-              </div>
-            )}
+              <Button
+                type="submit"
+                marginTop="24px"
+                onClick={() => {
+                  formPayment.submitForm()
+                }}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Finalizando...' : 'Finalizar pagamento'}
+              </Button>
+              <Button type="button" onClick={showDelivery} marginTop="8px">
+                Voltar para a edição de endereço
+              </Button>
+            </div>
+          )}
         </form>
 
         {/* confirmation text */}
